@@ -1,0 +1,5 @@
+.architect
+.sencha/
+bootstrap.json
+build/
+ext/
