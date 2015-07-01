@@ -5,7 +5,7 @@ import net.jcip.annotations.ThreadSafe;
 @ThreadSafe
 public class MySqlUtil {
 
-    public static void initialize() {
+    static void initialize() {
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {

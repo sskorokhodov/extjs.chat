@@ -33,7 +33,7 @@ public class ChatLogServlet extends HttpServlet {
         response.getWriter().println(json);
     }
 
-    Iterable<ChatMessage> readLastMessages(int limit) throws ServletException {
+    private Iterable<ChatMessage> readLastMessages(int limit) throws ServletException {
         try {
             return chatLogTable.readLast(limit);
         } catch (SQLException e) {

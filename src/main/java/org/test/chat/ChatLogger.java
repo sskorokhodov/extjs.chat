@@ -31,7 +31,7 @@ public class ChatLogger {
         }
     }
 
-    void dispose() {
+    public void dispose() {
         eventServer.unsubscribe(ChatEvent.CHAT_MESSAGE.name(), listener);
     }
 }
