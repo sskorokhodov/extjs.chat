@@ -14,7 +14,7 @@ public class ChatLogTable {
         MySqlUtil.initialize();
     }
 
-    private static final String createTableQueryString =
+    private static final String CREATE_TABLE_QUERY_STRING =
             "CREATE TABLE IF NOT EXISTS log (" +
                     "id BIGINT not null AUTO_INCREMENT,"+
                     "name VARCHAR(64) NOT NULL," +
@@ -22,12 +22,12 @@ public class ChatLogTable {
                     "PRIMARY KEY (id)" +
                     ") CHARSET utf8;";
 
-    private static final String readLastQueryString =
+    private static final String READ_LAST_QUERY_STRING =
             "SELECT name, message from (" +
                     "SELECT id, name, message FROM log ORDER BY id DESC LIMIT ?) sub " +
                     "ORDER BY id ASC;";
 
-    private static final String insertQueryString = "INSERT INTO log (name, message) VALUES (?, ?);";
+    private static final String INSERT_QUERY_STRING = "INSERT INTO log (name, message) VALUES (?, ?);";
 
     private final String connectionString;
 
@@ -38,14 +38,14 @@ public class ChatLogTable {
 
     private static void ensureTableExists(String connectionString) throws SQLException {
         try (Connection connection = DriverManager.getConnection(connectionString);
-             PreparedStatement statement = connection.prepareStatement(createTableQueryString)) {
+             PreparedStatement statement = connection.prepareStatement(CREATE_TABLE_QUERY_STRING)) {
             statement.execute();
         }
     }
 
     public Iterable<ChatMessage> readLast(int limit) throws SQLException {
         try (Connection connection = DriverManager.getConnection(connectionString);
-             PreparedStatement statement = connection.prepareStatement(readLastQueryString)) {
+             PreparedStatement statement = connection.prepareStatement(READ_LAST_QUERY_STRING)) {
             statement.setInt(1, limit);
             ResultSet rs = statement.executeQuery();
             boolean hasRow = rs.first();
@@ -62,7 +62,7 @@ public class ChatLogTable {
 
     public void insert(ChatMessage message) throws SQLException {
         try (Connection connection = DriverManager.getConnection(connectionString);
-             PreparedStatement statement = connection.prepareStatement(insertQueryString)) {
+             PreparedStatement statement = connection.prepareStatement(INSERT_QUERY_STRING)) {
             statement.setString(1, message.user);
             statement.setString(2, message.text);
             statement.execute();
