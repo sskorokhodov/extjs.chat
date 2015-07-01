@@ -1,6 +1,8 @@
 package org.test.chat;
 
 import com.google.gson.Gson;
+import net.jcip.annotations.NotThreadSafe;
+import net.jcip.annotations.ThreadSafe;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
@@ -9,6 +11,7 @@ import org.eclipse.jetty.websocket.servlet.*;
 
 import java.util.Objects;
 
+@ThreadSafe
 public class MessageStreamServlet extends WebSocketServlet {
 
     private final EventServer eventServer = EventServer.getEventServer();
@@ -19,6 +22,7 @@ public class MessageStreamServlet extends WebSocketServlet {
         factory.setCreator((req, resp) -> new StreamSocket(eventServer));
     }
 
+    @NotThreadSafe
     @WebSocket
     public static class StreamSocket {
 
@@ -26,7 +30,7 @@ public class MessageStreamServlet extends WebSocketServlet {
 
         private final EventServer eventServer;
 
-        private volatile EventServer.Listener listener;
+        private EventServer.Listener listener;
 
         public StreamSocket(EventServer eventServer) {
             this.eventServer = Objects.requireNonNull(eventServer);
