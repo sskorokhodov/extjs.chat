@@ -14,12 +14,11 @@ import java.util.Objects;
 @ThreadSafe
 public class MessageStreamServlet extends WebSocketServlet {
 
-    private final EventServer eventServer = EventServer.getEventServer();
+    private static final EventServer eventServer = EventServer.getEventServer();
 
     @Override
     public void configure(WebSocketServletFactory factory) {
-        Objects.requireNonNull(eventServer);
-        factory.setCreator((req, resp) -> new StreamSocket(eventServer));
+        factory.setCreator((req, resp) -> new StreamSocket());
     }
 
     @NotThreadSafe
@@ -28,13 +27,7 @@ public class MessageStreamServlet extends WebSocketServlet {
 
         private final Gson gson = new Gson();
 
-        private final EventServer eventServer;
-
         private EventServer.Listener listener;
-
-        public StreamSocket(EventServer eventServer) {
-            this.eventServer = Objects.requireNonNull(eventServer);
-        }
 
         @OnWebSocketConnect
         public void onConnect(Session session) {
