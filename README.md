@@ -6,6 +6,8 @@ less than 64 characters.
 
 Current user name is displayed in chat's header in brackets.
 
+To enter chat open `http://CHAT_SERVER_HOST:CHAT_SERVER_PORT`.
+
 
 ## Installation
 
