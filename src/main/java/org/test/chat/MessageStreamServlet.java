@@ -15,21 +15,8 @@ public class MessageStreamServlet extends WebSocketServlet {
 
     @Override
     public void configure(WebSocketServletFactory factory) {
-        factory.setCreator(new StreamSocketCreator(eventServer));
-    }
-
-    private static class StreamSocketCreator implements WebSocketCreator {
-
-        private final EventServer eventServer;
-
-        public StreamSocketCreator(EventServer eventServer) {
-            this.eventServer = Objects.requireNonNull(eventServer);
-        }
-
-        @Override
-        public Object createWebSocket(ServletUpgradeRequest req, ServletUpgradeResponse resp) {
-            return new StreamSocket(eventServer);
-        }
+        Objects.requireNonNull(eventServer);
+        factory.setCreator((req, resp) -> new StreamSocket(eventServer));
     }
 
     @WebSocket
