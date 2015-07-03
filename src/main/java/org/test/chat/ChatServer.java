@@ -17,10 +17,6 @@ import java.util.Properties;
 
 public class ChatServer {
 
-    private static final int LOG_SIZE = 100;
-
-    private static final String RESOURCES_PATH = "web/";
-
     private static final String JDBC_URI;
 
     private static final int HTTP_SERVER_PORT;
@@ -48,6 +44,20 @@ public class ChatServer {
         }
     }
 
+    private static final int LOG_SIZE = 100;
+
+    private static final String STATIC_RESOURCES_PATH = "web/";
+
+    private static final String WELCOME_FILE_PATH = "index.html";
+
+    private static final String CHAT_LOG_RESOURCE_PATH = "/chat-log";
+
+    private static final String SEND_RESOURCE_PATH = "/send";
+
+    private static final String CHAT_RESOURCE_PATH = "/chat";
+
+    private static final String STREAM_RESOURCE_PATH = "/stream";
+
     public static void main(String[] args) throws Exception {
         final Server server = new Server();
         final ServerConnector connector = new ServerConnector(server);
@@ -55,22 +65,20 @@ public class ChatServer {
         server.setConnectors(new Connector[]{connector});
 
         final ServletContextHandler resourceContextHandler = new ServletContextHandler();
-        resourceContextHandler.setContextPath("/");
-        final ResourceHandler rh = new ResourceHandler();
-        rh.setResourceBase(RESOURCES_PATH);
-        rh.setWelcomeFiles(new String[]{"index.html"});
-        resourceContextHandler.setHandler(rh);
+        final ResourceHandler resourceHandler = new ResourceHandler();
+        resourceHandler.setResourceBase(STATIC_RESOURCES_PATH);
+        resourceHandler.setWelcomeFiles(new String[]{WELCOME_FILE_PATH});
+        resourceContextHandler.setHandler(resourceHandler);
 
-        final ServletContextHandler servletHandler = new ServletContextHandler();
-        servletHandler.setContextPath("/");
-        servletHandler.addServlet(new ServletHolder(new MessageStreamServlet()), "/stream");
-        servletHandler.addServlet(new ServletHolder(new ChatServlet(LOG_SIZE)), "/chat");
-        servletHandler.addServlet(new ServletHolder(new SendMessageServlet()), "/send");
+        final ServletContextHandler servletContextHandler = new ServletContextHandler();
+        servletContextHandler.addServlet(new ServletHolder(new MessageStreamServlet()), STREAM_RESOURCE_PATH);
+        servletContextHandler.addServlet(new ServletHolder(new ChatServlet(LOG_SIZE)), CHAT_RESOURCE_PATH);
+        servletContextHandler.addServlet(new ServletHolder(new SendMessageServlet()), SEND_RESOURCE_PATH);
         ChatLogTable chatLogTable = new ChatLogTable(JDBC_URI);
-        servletHandler.addServlet(new ServletHolder(new ChatLogServlet(chatLogTable)), "/chat-log");
+        servletContextHandler.addServlet(new ServletHolder(new ChatLogServlet(chatLogTable)), CHAT_LOG_RESOURCE_PATH);
 
         final HandlerCollection handlers = new HandlerCollection();
-        handlers.setHandlers(new Handler[]{resourceContextHandler, servletHandler, new DefaultHandler()});
+        handlers.setHandlers(new Handler[]{resourceContextHandler, servletContextHandler, new DefaultHandler()});
         server.setHandler(handlers);
 
         final ChatLogger logWriter = new ChatLogger(chatLogTable);
