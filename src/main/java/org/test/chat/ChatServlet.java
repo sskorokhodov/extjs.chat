@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.Queue;
 
 @ThreadSafe
-public class ChatServlet extends HttpServlet {
+class ChatServlet extends HttpServlet {
 
     private final Gson gson = new Gson();
 
@@ -24,7 +24,7 @@ public class ChatServlet extends HttpServlet {
 
     private final EventServer.Listener listener = e -> onChatMessage((ChatMessage) e);
 
-    public ChatServlet(int logSize) {
+    ChatServlet(int logSize) {
         if (logSize < 0) {
             throw new IllegalArgumentException("logSize < 0");
         }

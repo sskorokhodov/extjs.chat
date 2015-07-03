@@ -12,13 +12,13 @@ import java.sql.SQLException;
 import java.util.Objects;
 
 @ThreadSafe
-public class ChatLogServlet extends HttpServlet {
+class ChatLogServlet extends HttpServlet {
 
     private final Gson gson = new Gson();
 
     private final ChatLogTable chatLogTable;
 
-    public ChatLogServlet(ChatLogTable chatLogTable) {
+    ChatLogServlet(ChatLogTable chatLogTable) {
         this.chatLogTable = Objects.requireNonNull(chatLogTable);
     }
 

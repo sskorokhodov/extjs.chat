@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.Objects;
 
 @ThreadSafe
-public class ChatLogger {
+class ChatLogger {
 
     private final EventServer eventServer = EventServer.getEventServer();
 
@@ -14,7 +14,7 @@ public class ChatLogger {
 
     private final ChatLogTable chatLogTable;
 
-    public ChatLogger(ChatLogTable chatLogTable) {
+    ChatLogger(ChatLogTable chatLogTable) {
         this.chatLogTable = Objects.requireNonNull(chatLogTable);
         eventServer.subscribe(ChatEvent.CHAT_MESSAGE.name(), listener);
     }
@@ -27,7 +27,7 @@ public class ChatLogger {
         }
     }
 
-    public void dispose() {
+    void dispose() {
         eventServer.unsubscribe(ChatEvent.CHAT_MESSAGE.name(), listener);
     }
 }

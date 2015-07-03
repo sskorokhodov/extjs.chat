@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @ThreadSafe
-public class SendMessageServlet extends HttpServlet {
+class SendMessageServlet extends HttpServlet {
 
     private final EventServer eventServer = EventServer.getEventServer();
 

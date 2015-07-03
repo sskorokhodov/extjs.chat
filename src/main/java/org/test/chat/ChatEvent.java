@@ -1,6 +1,6 @@
 package org.test.chat;
 
-public enum ChatEvent {
+enum ChatEvent {
 
     CHAT_MESSAGE
 }

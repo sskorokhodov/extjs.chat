@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 @ThreadSafe
-public class ChatLogTable {
+class ChatLogTable {
 
     static {
         MySqlUtil.initialize();
@@ -32,7 +32,7 @@ public class ChatLogTable {
 
     private final String connectionString;
 
-    public ChatLogTable(String connectionString) throws SQLException {
+    ChatLogTable(String connectionString) throws SQLException {
         this.connectionString = Objects.requireNonNull(connectionString, "connectionString == null");
         ensureTableExists(connectionString);
     }
@@ -44,7 +44,7 @@ public class ChatLogTable {
         }
     }
 
-    public Iterable<ChatMessage> readLast(int limit) throws SQLException {
+    Iterable<ChatMessage> readLast(int limit) throws SQLException {
         if (limit < 0) {
             throw new IllegalArgumentException("limit < 0");
         } else if (limit == 0) {
@@ -66,7 +66,7 @@ public class ChatLogTable {
         }
     }
 
-    public void insert(ChatMessage message) throws SQLException {
+    void insert(ChatMessage message) throws SQLException {
         Objects.requireNonNull(message, "message == null");
         try (Connection connection = DriverManager.getConnection(connectionString);
              PreparedStatement statement = connection.prepareStatement(INSERT_QUERY_STRING)) {

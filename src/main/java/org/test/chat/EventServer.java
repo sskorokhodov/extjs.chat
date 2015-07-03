@@ -6,11 +6,11 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @ThreadSafe
-public class EventServer {
+class EventServer {
 
     private static final EventServer eventServer = new EventServer();
 
-    public static EventServer getEventServer() {
+    static EventServer getEventServer() {
         return eventServer;
     }
 
@@ -19,7 +19,7 @@ public class EventServer {
 
     private final Map<String, Set<Listener>> eventToListeners = new ConcurrentHashMap<>();
 
-    public void publish(String eventName, Object event) {
+    void publish(String eventName, Object event) {
         Objects.requireNonNull(eventName, "eventName == null");
         Objects.requireNonNull(event, "event == null");
         Set<Listener> ls = eventToListeners.get(eventName);
@@ -34,7 +34,7 @@ public class EventServer {
         }
     }
 
-    public void subscribe(String eventName, Listener listener) {
+    void subscribe(String eventName, Listener listener) {
         Objects.requireNonNull(eventName, "eventName == null");
         Objects.requireNonNull(listener, "listener == null");
         eventToListeners.compute(eventName, (e, ls) -> {
@@ -46,7 +46,7 @@ public class EventServer {
         });
     }
 
-    public void unsubscribe(String eventName, Listener listener) {
+    void unsubscribe(String eventName, Listener listener) {
         Objects.requireNonNull(eventName, "eventName == null");
         Objects.requireNonNull(listener, "listener == null");
         eventToListeners.computeIfPresent(eventName, (e, ls) -> {
@@ -56,7 +56,7 @@ public class EventServer {
     }
 
     @FunctionalInterface
-    public interface Listener {
+    interface Listener {
 
         void process(Object event);
     }

@@ -3,7 +3,7 @@ package org.test.chat;
 import net.jcip.annotations.ThreadSafe;
 
 @ThreadSafe
-public class MySqlUtil {
+class MySqlUtil {
 
     static void initialize() {
         try {

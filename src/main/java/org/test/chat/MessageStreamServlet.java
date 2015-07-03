@@ -12,7 +12,7 @@ import org.eclipse.jetty.websocket.servlet.*;
 import java.util.Objects;
 
 @ThreadSafe
-public class MessageStreamServlet extends WebSocketServlet {
+class MessageStreamServlet extends WebSocketServlet {
 
     private static final EventServer eventServer = EventServer.getEventServer();
 
