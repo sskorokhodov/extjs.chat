@@ -8,10 +8,6 @@ import java.util.Objects;
 @ThreadSafe
 public class ChatLogger {
 
-    static {
-        MySqlUtil.initialize();
-    }
-
     private final EventServer eventServer = EventServer.getEventServer();
 
     private final EventServer.Listener listener = e -> log((ChatMessage) e);
