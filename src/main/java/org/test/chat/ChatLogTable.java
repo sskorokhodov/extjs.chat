@@ -3,6 +3,7 @@ package org.test.chat;
 import net.jcip.annotations.ThreadSafe;
 
 import java.sql.*;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
@@ -32,8 +33,8 @@ public class ChatLogTable {
     private final String connectionString;
 
     public ChatLogTable(String connectionString) throws SQLException {
-        ensureTableExists(connectionString);
         this.connectionString = Objects.requireNonNull(connectionString, "connectionString == null");
+        ensureTableExists(connectionString);
     }
 
     private static void ensureTableExists(String connectionString) throws SQLException {
@@ -44,6 +45,11 @@ public class ChatLogTable {
     }
 
     public Iterable<ChatMessage> readLast(int limit) throws SQLException {
+        if (limit < 0) {
+            throw new IllegalArgumentException("limit < 0");
+        } else if (limit == 0) {
+            return new ArrayList<>(0);
+        }
         try (Connection connection = DriverManager.getConnection(connectionString);
              PreparedStatement statement = connection.prepareStatement(READ_LAST_QUERY_STRING)) {
             statement.setInt(1, limit);
@@ -61,6 +67,7 @@ public class ChatLogTable {
     }
 
     public void insert(ChatMessage message) throws SQLException {
+        Objects.requireNonNull(message, "message == null");
         try (Connection connection = DriverManager.getConnection(connectionString);
              PreparedStatement statement = connection.prepareStatement(INSERT_QUERY_STRING)) {
             statement.setString(1, message.user);

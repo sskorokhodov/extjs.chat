@@ -21,6 +21,7 @@ public class EventServer {
 
     public void publish(String eventName, Object event) {
         Objects.requireNonNull(eventName, "eventName == null");
+        Objects.requireNonNull(event, "event == null");
         Set<Listener> ls = eventToListeners.get(eventName);
         if (ls != null) {
             ls.forEach(l -> {

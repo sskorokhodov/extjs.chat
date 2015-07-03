@@ -25,8 +25,11 @@ public class ChatServlet extends HttpServlet {
     private final EventServer.Listener listener = e -> onChatMessage((ChatMessage) e);
 
     public ChatServlet(int logSize) {
+        if (logSize < 0) {
+            throw new IllegalArgumentException("logSize < 0");
+        }
         this.logSize = logSize;
-        this.messages = new ConcurrentArrayQueue<>(logSize);
+        this.messages = new ConcurrentArrayQueue<>();
         eventServer.subscribe(ChatEvent.CHAT_MESSAGE.name(), listener);
     }
 
