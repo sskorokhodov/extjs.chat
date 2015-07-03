@@ -1,5 +1,5 @@
-.architect
-.sencha/
+/.architect
+/.sencha/
 bootstrap.json
-build/
-ext/
+/build/
+/ext/
