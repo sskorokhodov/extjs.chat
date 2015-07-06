@@ -23,7 +23,7 @@ public class ChatServer {
 
     static {
 
-        final String PROPERTIES_FILE_NAME = "chat.properties";
+        final String PROPERTIES_FILE_PATH = "etc/chat.properties";
 
         final String JDBC_URI_PROPERTY_NAME = "jdbcUri";
 
@@ -33,14 +33,14 @@ public class ChatServer {
 
         try {
             Properties properties = new Properties();
-            FileInputStream fileInputStream = new FileInputStream(PROPERTIES_FILE_NAME);
+            FileInputStream fileInputStream = new FileInputStream(PROPERTIES_FILE_PATH);
             properties.load(fileInputStream);
             JDBC_URI = Objects.requireNonNull(
                     properties.getProperty(JDBC_URI_PROPERTY_NAME), JDBC_URI_PROPERTY_NAME + " == null");
             HTTP_SERVER_PORT = Integer.parseInt(
                     properties.getProperty(PORT_PROPERTY_NAME, Integer.toString(DEFAULT_PORT)));
         } catch (IOException e) {
-            throw new RuntimeException("can't read '" + PROPERTIES_FILE_NAME + "' config file", e);
+            throw new RuntimeException("can't read '" + PROPERTIES_FILE_PATH + "' config file", e);
         }
     }
 

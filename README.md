@@ -27,8 +27,7 @@ To enter chat open `http://CHAT_SERVER_HOST:CHAT_SERVER_PORT` in browser.
 
 ## Settings
 
-All chat settings are kept in `chat.properties` file in the directory where
-chat's .jar file is located.
+All chat settings are kept in `etc/chat.properties`.
 
 Parameters:
 
