@@ -2,6 +2,8 @@ package org.test.chat;
 
 import com.google.gson.Gson;
 import net.jcip.annotations.ThreadSafe;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,6 +15,8 @@ import java.util.Objects;
 
 @ThreadSafe
 class ChatLogServlet extends HttpServlet {
+
+    private static final Logger log = LoggerFactory.getLogger(ChatLogServlet.class);
 
     private final Gson gson = new Gson();
 
@@ -28,7 +32,7 @@ class ChatLogServlet extends HttpServlet {
         response.setStatus(HttpServletResponse.SC_OK);
         int limit = Integer.parseInt(request.getParameter("limit"));
         Iterable<ChatMessage> messages = readLastMessages(limit);
-        messages.forEach(System.out::println);
+        messages.forEach(m -> log.debug(m.toString()));
         String json = gson.toJson(messages);
         response.getWriter().println(json);
     }

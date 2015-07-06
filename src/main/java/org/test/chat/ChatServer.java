@@ -1,5 +1,9 @@
 package org.test.chat;
 
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.joran.JoranConfigurator;
+import ch.qos.logback.core.joran.spi.JoranException;
+import ch.qos.logback.core.util.StatusPrinter;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
@@ -9,6 +13,8 @@ import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -17,9 +23,25 @@ import java.util.Properties;
 
 public class ChatServer {
 
+    private static final Logger log = LoggerFactory.getLogger(ChatServer.class);
+
     private static final String JDBC_URI;
 
     private static final int HTTP_SERVER_PORT;
+
+    private static final String LOGBACK_SETTINGS_PATH = "etc/logback.xml";
+
+    static {
+        LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
+        try {
+            JoranConfigurator configurator = new JoranConfigurator();
+            configurator.setContext(context);
+            context.reset();
+            configurator.doConfigure(LOGBACK_SETTINGS_PATH);
+        } catch (JoranException je) {
+            StatusPrinter.printInCaseOfErrorsOrWarnings(context);
+        }
+    }
 
     static {
 
@@ -58,34 +80,39 @@ public class ChatServer {
 
     private static final String STREAM_RESOURCE_PATH = "/stream";
 
-    public static void main(String[] args) throws Exception {
-        final Server server = new Server();
-        final ServerConnector connector = new ServerConnector(server);
-        connector.setPort(HTTP_SERVER_PORT);
-        server.setConnectors(new Connector[]{connector});
+    public static void main(String[] args) {
+        try {
+            final Server server = new Server();
+            final ServerConnector connector = new ServerConnector(server);
+            connector.setPort(HTTP_SERVER_PORT);
+            server.setConnectors(new Connector[]{connector});
 
-        final ServletContextHandler resourceContextHandler = new ServletContextHandler();
-        final ResourceHandler resourceHandler = new ResourceHandler();
-        resourceHandler.setResourceBase(STATIC_FILES_PATH);
-        resourceHandler.setWelcomeFiles(new String[]{WELCOME_FILE_PATH});
-        resourceContextHandler.setHandler(resourceHandler);
+            final ServletContextHandler resourceContextHandler = new ServletContextHandler();
+            final ResourceHandler resourceHandler = new ResourceHandler();
+            resourceHandler.setResourceBase(STATIC_FILES_PATH);
+            resourceHandler.setWelcomeFiles(new String[]{WELCOME_FILE_PATH});
+            resourceContextHandler.setHandler(resourceHandler);
 
-        final ServletContextHandler servletContextHandler = new ServletContextHandler();
-        servletContextHandler.addServlet(new ServletHolder(new MessageStreamServlet()), STREAM_RESOURCE_PATH);
-        servletContextHandler.addServlet(new ServletHolder(new ChatServlet(LOG_SIZE)), CHAT_RESOURCE_PATH);
-        servletContextHandler.addServlet(new ServletHolder(new SendMessageServlet()), SEND_RESOURCE_PATH);
-        ChatLogTable chatLogTable = new ChatLogTable(JDBC_URI);
-        servletContextHandler.addServlet(new ServletHolder(new ChatLogServlet(chatLogTable)), CHAT_LOG_RESOURCE_PATH);
+            final ServletContextHandler servletContextHandler = new ServletContextHandler();
+            servletContextHandler.addServlet(new ServletHolder(new MessageStreamServlet()), STREAM_RESOURCE_PATH);
+            servletContextHandler.addServlet(new ServletHolder(new ChatServlet(LOG_SIZE)), CHAT_RESOURCE_PATH);
+            servletContextHandler.addServlet(new ServletHolder(new SendMessageServlet()), SEND_RESOURCE_PATH);
+            ChatLogTable chatLogTable = new ChatLogTable(JDBC_URI);
+            servletContextHandler.addServlet(new ServletHolder(new ChatLogServlet(chatLogTable)), CHAT_LOG_RESOURCE_PATH);
 
-        final HandlerCollection handlers = new HandlerCollection();
-        handlers.setHandlers(new Handler[]{resourceContextHandler, servletContextHandler, new DefaultHandler()});
-        server.setHandler(handlers);
+            final HandlerCollection handlers = new HandlerCollection();
+            handlers.setHandlers(new Handler[]{resourceContextHandler, servletContextHandler, new DefaultHandler()});
+            server.setHandler(handlers);
 
-        final ChatLogger logWriter = new ChatLogger(chatLogTable);
+            final ChatLogger logWriter = new ChatLogger(chatLogTable);
 
-        server.start();
-        server.join();
+            server.start();
+            server.join();
 
-        logWriter.dispose();
+            logWriter.dispose();
+        } catch (Exception e) {
+            log.error("can't start chat server", e);
+            throw new RuntimeException("can't start chat server", e);
+        }
     }
 }

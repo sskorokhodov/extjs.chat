@@ -7,12 +7,15 @@ import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
-import org.eclipse.jetty.websocket.servlet.*;
-
-import java.util.Objects;
+import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
+import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ThreadSafe
 class MessageStreamServlet extends WebSocketServlet {
+
+    private static final Logger log = LoggerFactory.getLogger(MessageStreamServlet.class);
 
     private static final EventServer eventServer = EventServer.getEventServer();
 
@@ -31,13 +34,13 @@ class MessageStreamServlet extends WebSocketServlet {
 
         @OnWebSocketConnect
         public void onConnect(Session session) {
-            System.out.printf("Got connect: %s%n", session);
+            log.debug("got connection: {}", session);
             listener = e -> {
                 try {
                     session.getRemote().sendStringByFuture(gson.toJson(e));
                 } catch (Throwable t) {
+                    log.error("can't send WS message to remote client, message: {}, session: {}", e, session, t);
                     session.close();
-                    t.printStackTrace();
                 }
             };
             eventServer.subscribe(ChatEvent.CHAT_MESSAGE.name(), listener);
@@ -45,7 +48,7 @@ class MessageStreamServlet extends WebSocketServlet {
 
         @OnWebSocketClose
         public void onClose(int statusCode, String reason) {
-            System.out.printf("Connection closed: %d - %s%n", statusCode, reason);
+            log.debug("connection closed: {} - {}", statusCode, reason);
             if (listener != null) {
                 eventServer.unsubscribe(ChatEvent.CHAT_MESSAGE.name(), listener);
                 listener = null;

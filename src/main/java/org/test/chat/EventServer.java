@@ -1,12 +1,19 @@
 package org.test.chat;
 
 import net.jcip.annotations.ThreadSafe;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 @ThreadSafe
 class EventServer {
+
+    private static final Logger log = LoggerFactory.getLogger(EventServer.class);
 
     private static final EventServer eventServer = new EventServer();
 
@@ -28,7 +35,7 @@ class EventServer {
                 try {
                     l.process(event);
                 } catch (RuntimeException e) {
-                    e.printStackTrace();
+                    log.error("error while processing message with listener {}", l, e);
                 }
             });
         }
