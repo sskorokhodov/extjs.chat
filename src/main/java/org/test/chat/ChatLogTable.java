@@ -14,11 +14,11 @@ class ChatLogTable {
         MySqlUtil.initialize();
     }
 
-    private static final String TABLE_NAME = "log";
+    private static final String TABLE_NAME = "messages";
 
-    private static final String USER_FIELD_NAME = "name";
+    private static final String USER_FIELD_NAME = "user";
 
-    private static final String TEXT_FIELD_NAME = "message";
+    private static final String TEXT_FIELD_NAME = "text";
 
     private static final String CREATE_TABLE_QUERY_STRING =
             "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" +
