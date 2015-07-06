@@ -57,9 +57,9 @@ class ChatLogTable {
             boolean hasRow = rs.first();
             Collection<ChatMessage> messages = new ArrayList<>();
             while (hasRow) {
-                String name = rs.getString("name");
+                String user = rs.getString("name");
                 String text = rs.getString("message");
-                messages.add(new ChatMessage(name, text));
+                messages.add(new ChatMessage(user, text));
                 hasRow = rs.next();
             }
             return messages;

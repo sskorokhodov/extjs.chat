@@ -17,9 +17,9 @@ class SendMessageServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         response.setStatus(HttpServletResponse.SC_OK);
         String user = request.getParameter("user");
-        String message = request.getParameter("msg");
-        System.out.println("got message: " + message);
-        ChatMessage chatMessage = new ChatMessage(user, message);
+        String text = request.getParameter("msg");
+        System.out.println("got message, user: " + user + ", text: " + text);
+        ChatMessage chatMessage = new ChatMessage(user, text);
         eventServer.publish(ChatEvent.CHAT_MESSAGE.name(), chatMessage);
     }
 }
