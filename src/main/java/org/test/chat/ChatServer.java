@@ -46,7 +46,7 @@ public class ChatServer {
 
     private static final int LOG_SIZE = 100;
 
-    private static final String STATIC_RESOURCES_PATH = "web/";
+    private static final String STATIC_FILES_PATH = "web/";
 
     private static final String WELCOME_FILE_PATH = "index.html";
 
@@ -66,7 +66,7 @@ public class ChatServer {
 
         final ServletContextHandler resourceContextHandler = new ServletContextHandler();
         final ResourceHandler resourceHandler = new ResourceHandler();
-        resourceHandler.setResourceBase(STATIC_RESOURCES_PATH);
+        resourceHandler.setResourceBase(STATIC_FILES_PATH);
         resourceHandler.setWelcomeFiles(new String[]{WELCOME_FILE_PATH});
         resourceContextHandler.setHandler(resourceHandler);
 
