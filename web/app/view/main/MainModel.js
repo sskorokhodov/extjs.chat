@@ -12,7 +12,8 @@ Ext.define('Chat.view.main.MainModel', {
         messageAreaHeight: {
             bind: 50,
             single: true
-        }
+        },
+        userNameWidth: 150
     },
 
     formulas: {

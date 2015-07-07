@@ -41,7 +41,9 @@ Ext.define('Chat.view.main.Main', {
         }],
         columns: [{
             dataIndex: 'user',
-            width: 150,
+            bind: {
+                width: '{userNameWidth}'
+            },
             renderer: function(val, meta) {
                 meta.tdStyle = 'background-color:#e0eaf3; font-weight:bold;';
                 return val;
