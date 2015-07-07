@@ -47,7 +47,7 @@ Ext.define('Chat.view.main.Main', {
             }
         }, {
             text: 'Message',
-            dataIndex: 'msg',
+            dataIndex: 'text',
             flex: 1,
             renderer: function(val) {
                 return '<div style="white-space:pre-wrap; word-wrap:break-word;">'+ val +'</div>';

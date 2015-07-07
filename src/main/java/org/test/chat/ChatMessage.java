@@ -11,7 +11,7 @@ final class ChatMessage {
     @SerializedName("user")
     final String user;
 
-    @SerializedName("msg")
+    @SerializedName("text")
     final String text;
 
     ChatMessage(String user, String text) {

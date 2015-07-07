@@ -62,9 +62,9 @@ Ext.define('Chat.view.main.MainController', {
                     that.onServerUnavailable();
                 };
                 ws.onmessage = function(e) {
-                    console.log("new msg: ", e.data);
+                    console.log("new message: ", e.data);
                     var msg = JSON.parse(e.data);
-                    that.appendMessages([{user: msg.user, msg: msg.msg}]);
+                    that.appendMessages([{user: msg.user, text: msg.text}]);
                 };
             },
             failure: function(response) {
@@ -107,8 +107,8 @@ Ext.define('Chat.view.main.MainController', {
     updateMessages: function(messages, shouldAppend) {
         var encodedMessages = messages.map(function(m) {
             var u = Ext.String.htmlEncode(m.user);
-            var t = Ext.String.htmlEncode(m.msg);
-            return {user: u, msg: t};
+            var t = Ext.String.htmlEncode(m.text);
+            return {user: u, text: t};
         });
         console.log(encodedMessages);
         var store = Ext.data.StoreManager.lookup('ChatLog');
@@ -147,7 +147,7 @@ Ext.define('Chat.view.main.MainController', {
                 method: 'POST',
                 params: {
                     user: userName,
-                    msg: message
+                    text: message
                 },
                 success: function(response) {
                     console.log('message sent');
