@@ -40,7 +40,6 @@ Ext.define('Chat.view.main.Main', {
             tooltip: 'Logout'
         }],
         columns: [{
-            text: 'User',
             dataIndex: 'user',
             width: 150,
             renderer: function(val, meta) {
@@ -48,7 +47,6 @@ Ext.define('Chat.view.main.Main', {
                 return val;
             }
         }, {
-            text: 'Message',
             dataIndex: 'text',
             flex: 1,
             renderer: function(val) {
