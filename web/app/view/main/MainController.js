@@ -34,7 +34,7 @@ Ext.define('Chat.view.main.MainController', {
 
     setUser: function(user) {
         try {
-            sessionStorage.setItem("userName", text);
+            sessionStorage.setItem("userName", user);
         } catch (e) {
             console.log('can not save userName to sessionStorage', e);
         }
