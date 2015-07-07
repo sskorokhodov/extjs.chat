@@ -8,7 +8,11 @@ Ext.define('Chat.view.main.MainModel', {
 
     data: {
         name: 'Chat',
-        user: null
+        user: null,
+        messageAreaHeight: {
+            bind: 50,
+            single: true
+        }
     },
 
     formulas: {

@@ -55,7 +55,9 @@ Ext.define('Chat.view.main.Main', {
         }]
     }, {
         xtype: 'container',
-        height: 50,
+        bind: {
+            height: '{messageAreaHeight}'
+        },
         layout: {
             type: 'hbox',
             pack: 'start',
