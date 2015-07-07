@@ -23,7 +23,9 @@ Ext.define('Chat.view.main.Main', {
         xtype: 'grid',
         name: 'chatArea',
         reference: 'chatArea',
-        title: 'Chat',
+        bind: {
+            title: '{title}',
+        },
         editable: false,
         hideHeaders: true,
         disableSelection: true,

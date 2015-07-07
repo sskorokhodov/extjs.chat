@@ -10,13 +10,12 @@ Ext.define('Chat.view.main.MainController', {
     ],
     alias: 'controller.main',
 
-    userName: Ext.String.htmlEncode(sessionStorage.getItem("userName")),
-
     init: function(application) {
-        if (Ext.isEmpty(this.userName)) {
+        var user = Ext.String.htmlEncode(sessionStorage.getItem("userName"));
+        if (Ext.isEmpty(user)) {
             this.askUserName();
         } else {
-            this.setChatTitle('Chat [' + this.userName + ']');
+            this.setUser(user);
         }
         this.listenToMessages(this);
     },
@@ -25,23 +24,26 @@ Ext.define('Chat.view.main.MainController', {
         var that = this;
         Ext.Msg.prompt("Welcome!", "Enter user name:", function(btn, text) {
             if (btn == 'ok' && (/^[\d\w ]{1,64}$/).test(text)) {
-                try {
-                    sessionStorage.setItem("userName", text);
-                } catch (e) {
-                    console.log('can not save userName to sessionStorage', e);
-                }
                 console.log('entered user name:', text);
-                that.userName = text;
-                that.setChatTitle('Chat [' + text + ']');
+                that.setUser(text);
             } else {
                 that.askUserName();
             }
         });
     },
 
-    setChatTitle: function(title) {
-        var chatArea = this.lookupReference("chatArea");
-        chatArea.setTitle(title);
+    setUser: function(user) {
+        try {
+            sessionStorage.setItem("userName", text);
+        } catch (e) {
+            console.log('can not save userName to sessionStorage', e);
+        }
+        this.getViewModel().set('user', user);
+    },
+
+    unsetUser: function() {
+        sessionStorage.removeItem("userName");
+        this.getViewModel().set('user', null);
     },
 
     listenToMessages: function(that) {
@@ -136,7 +138,7 @@ Ext.define('Chat.view.main.MainController', {
 
     sendMessage: function() {
         var that = this;
-        var userName = that.userName;
+        var userName = that.getViewModel().data.user;
         var msgArea = that.lookupReference('messageArea');
         var message = msgArea.getValue();
         if (!Ext.isEmpty(message)) {
@@ -162,7 +164,7 @@ Ext.define('Chat.view.main.MainController', {
     },
 
     onLogoutBtnClick: function() {
-        sessionStorage.removeItem("userName");
+        this.unsetUser();
         this.askUserName();
     }
 });

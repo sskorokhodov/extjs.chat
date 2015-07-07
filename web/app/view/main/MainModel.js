@@ -7,6 +7,15 @@ Ext.define('Chat.view.main.MainModel', {
     alias: 'viewmodel.main',
 
     data: {
-        name: 'Chat'
+        name: 'Chat',
+        user: null
+    },
+
+    formulas: {
+        title: function(get) {
+            var user = get('user');
+            var name = get('name');
+            return Ext.isEmpty(user) ? name : name + ' [' + user + ']';
+        }
     }
 });
