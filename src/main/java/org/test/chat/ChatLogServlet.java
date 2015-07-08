@@ -20,10 +20,10 @@ class ChatLogServlet extends HttpServlet {
 
     private final Gson gson = new Gson();
 
-    private final ChatLogTable chatLogTable;
+    private final MessagesTable messagesTable;
 
-    ChatLogServlet(ChatLogTable chatLogTable) {
-        this.chatLogTable = Objects.requireNonNull(chatLogTable);
+    ChatLogServlet(MessagesTable messagesTable) {
+        this.messagesTable = Objects.requireNonNull(messagesTable);
     }
 
     @Override
@@ -39,7 +39,7 @@ class ChatLogServlet extends HttpServlet {
 
     private Iterable<ChatMessage> readLastMessages(int limit) throws ServletException {
         try {
-            return chatLogTable.readLast(limit);
+            return messagesTable.readLast(limit);
         } catch (SQLException e) {
             throw new ServletException("can't read last " + limit + " messages", e);
         }

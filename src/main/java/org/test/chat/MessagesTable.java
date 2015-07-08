@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 @ThreadSafe
-class ChatLogTable {
+class MessagesTable {
 
     static {
         MySqlUtil.initialize();
@@ -42,7 +42,7 @@ class ChatLogTable {
 
     private final String connectionString;
 
-    ChatLogTable(String connectionString) throws SQLException {
+    MessagesTable(String connectionString) throws SQLException {
         this.connectionString = Objects.requireNonNull(connectionString, "connectionString == null");
         ensureTableExists(connectionString);
     }

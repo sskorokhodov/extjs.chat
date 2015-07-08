@@ -12,16 +12,16 @@ class ChatLogger {
 
     private final EventServer.Listener listener = e -> log((ChatMessage) e);
 
-    private final ChatLogTable chatLogTable;
+    private final MessagesTable messagesTable;
 
-    ChatLogger(ChatLogTable chatLogTable) {
-        this.chatLogTable = Objects.requireNonNull(chatLogTable);
+    ChatLogger(MessagesTable messagesTable) {
+        this.messagesTable = Objects.requireNonNull(messagesTable);
         eventServer.subscribe(ChatEvent.NEW_MESSAGE.name(), listener);
     }
 
     private void log(ChatMessage message) {
         try {
-            chatLogTable.insert(message);
+            messagesTable.insert(message);
         } catch (SQLException e) {
             throw new RuntimeException("can't insert message: " + message, e);
         }

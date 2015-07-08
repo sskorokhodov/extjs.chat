@@ -97,14 +97,14 @@ public class ChatServer {
             servletContextHandler.addServlet(new ServletHolder(new MessageStreamServlet()), STREAM_RESOURCE_PATH);
             servletContextHandler.addServlet(new ServletHolder(new ChatServlet(LOG_SIZE)), CHAT_RESOURCE_PATH);
             servletContextHandler.addServlet(new ServletHolder(new SendMessageServlet()), SEND_RESOURCE_PATH);
-            ChatLogTable chatLogTable = new ChatLogTable(JDBC_URI);
-            servletContextHandler.addServlet(new ServletHolder(new ChatLogServlet(chatLogTable)), CHAT_LOG_RESOURCE_PATH);
+            MessagesTable messagesTable = new MessagesTable(JDBC_URI);
+            servletContextHandler.addServlet(new ServletHolder(new ChatLogServlet(messagesTable)), CHAT_LOG_RESOURCE_PATH);
 
             final HandlerCollection handlers = new HandlerCollection();
             handlers.setHandlers(new Handler[]{resourceContextHandler, servletContextHandler, new DefaultHandler()});
             server.setHandler(handlers);
 
-            final ChatLogger logWriter = new ChatLogger(chatLogTable);
+            final ChatLogger logWriter = new ChatLogger(messagesTable);
 
             server.start();
             server.join();
