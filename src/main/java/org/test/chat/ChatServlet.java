@@ -30,7 +30,7 @@ class ChatServlet extends HttpServlet {
         }
         this.logSize = logSize;
         this.messages = new ConcurrentArrayQueue<>();
-        eventServer.subscribe(ChatEvent.CHAT_MESSAGE.name(), listener);
+        eventServer.subscribe(ChatEvent.NEW_MESSAGE.name(), listener);
     }
 
     @Override
@@ -43,7 +43,7 @@ class ChatServlet extends HttpServlet {
 
     @Override
     public void destroy() {
-        eventServer.unsubscribe(ChatEvent.CHAT_MESSAGE.name(), listener);
+        eventServer.unsubscribe(ChatEvent.NEW_MESSAGE.name(), listener);
     }
 
     private synchronized void onChatMessage(ChatMessage message) {

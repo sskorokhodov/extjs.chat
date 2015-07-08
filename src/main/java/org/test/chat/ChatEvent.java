@@ -2,5 +2,5 @@ package org.test.chat;
 
 enum ChatEvent {
 
-    CHAT_MESSAGE
+    NEW_MESSAGE
 }

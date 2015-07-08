@@ -43,14 +43,14 @@ class MessageStreamServlet extends WebSocketServlet {
                     session.close();
                 }
             };
-            eventServer.subscribe(ChatEvent.CHAT_MESSAGE.name(), listener);
+            eventServer.subscribe(ChatEvent.NEW_MESSAGE.name(), listener);
         }
 
         @OnWebSocketClose
         public void onClose(int statusCode, String reason) {
             log.debug("connection closed: {} - {}", statusCode, reason);
             if (listener != null) {
-                eventServer.unsubscribe(ChatEvent.CHAT_MESSAGE.name(), listener);
+                eventServer.unsubscribe(ChatEvent.NEW_MESSAGE.name(), listener);
                 listener = null;
             }
         }

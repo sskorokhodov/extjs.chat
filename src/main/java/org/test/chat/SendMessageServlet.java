@@ -24,6 +24,6 @@ class SendMessageServlet extends HttpServlet {
         String text = request.getParameter("text");
         log.debug("got message, user: " + user + ", text: " + text);
         ChatMessage chatMessage = new ChatMessage(user, text);
-        eventServer.publish(ChatEvent.CHAT_MESSAGE.name(), chatMessage);
+        eventServer.publish(ChatEvent.NEW_MESSAGE.name(), chatMessage);
     }
 }
