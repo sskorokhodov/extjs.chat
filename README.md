@@ -1,37 +1,37 @@
 # Simple chat
 
-Allows to send messages to all connected clients and receive all messages from
-them. The only constraint is user name which is required and must consist of 
+Allows sending messages to all the connected clients and receive all their
+messages. The only constraint is the user name which is required and must be
 less than 64 characters.
 
-Current user name is displayed in chat's header in brackets.
+The current user name is displayed in the chat header in brackets.
 
-To enter chat open `http://CHAT_SERVER_HOST:CHAT_SERVER_PORT` in browser.
-
+To join the chat open `http://CHAT_SERVER_HOST:CHAT_SERVER_PORT` in browser.
 
 ## Installation
 
-1. Check if all requirements satisfied.
-2. Download latest build [here](https://bitbucket.org/sskorokhodov/extjs.chat/downloads/chat.zip).
-3. Extract archive.
-4. Put appropriate settings into `chat.properties`.
-    - ensure you have database to connect
-5. In terminal go to application directory and run `java -jar chat.jar`.
-
+1. Check if all the requirements are satisfied.
+2. Download the latest build [here][latest-build].
+3. Extract the archive.
+4. Configure the server by editing `chat.properties`.
+5. Ensure the database is up and running.
+5. Run the server `java -jar chat.jar`.
 
 ### Requirements
 
 - Java 1.8+
-- MySQL 5.1+ (must be running before application starts)
+- MySQL 5.1+ (must be running before the server)
 
 
 ## Settings
 
-All chat settings are kept in `etc/chat.properties`.
+The chat configuration file is `etc/chat.properties`.
 
 Parameters:
 
-`jdbcUri` - URI representing database to connect. Database from URI must exist.
-E.g. `jdbc:mysql://localhost/chat?user=root&characterEncoding=utf8`.
+`jdbcUri` - The DB connection URI.
+E.g., `jdbc:mysql://localhost/chat?user=root&characterEncoding=utf8`.
 
 `port` - HTTP server port. Defaults to `8080`.
+
+[latest-build]: https://bitbucket.org/sskorokhodov/extjs.chat/downloads/chat.zip
